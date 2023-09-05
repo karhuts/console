@@ -7,9 +7,10 @@ use function karthus\base_path;
 class Install {
 
     /**
+     * @param $event
      * @return void
      */
-    public static function install(): void{
+    public static function install($event): void{
         $dest = base_path() . "/karthus";
         if (is_dir($dest)) {
             echo "Installation failed, please remove directory $dest\n";

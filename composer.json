@@ -19,15 +19,11 @@
     "require-dev": {
         "karthus/framework": "^3.1"
     },
-    "scripts": {
-        "post-package-install": [
-            "karthus\\console\\Install::install"
-        ],
-        "post-package-update": [
-            "karthus\\console\\Install::update"
-        ],
-        "post-package-uninstall": [
-            "karthus\\console\\Install::uninstall"
-        ]
-    }
+    "bin": [
+        "./bin/karthus"
+    ],
+    "repositories": [{
+        "type": "path",
+        "url": "/Users/min/IdeaProjects/karthus/framework"
+    }]
 }

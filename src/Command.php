@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace karthus\console;
 
+use ReflectionClass;
 use Symfony\Component\Console\Command\Command as sCommand;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -16,8 +17,8 @@ class Command extends Application
      */
     public function installInternalCommands(): self
     {
-        $this->installCommands(__DIR__ . '/Commands',
-            'karthus\console\Commands');
+        $this->installCommands(__DIR__ . '/Command',
+            'karthus\console\Command');
 
         return $this;
     }
@@ -29,6 +30,11 @@ class Command extends Application
      */
     public function installCommands($path, string $namespace = 'app\command'): self
     {
+        // 如果path 不存在
+        if (!is_dir($path)) {
+            return $this;
+        }
+
         $dir_iterator = new RecursiveDirectoryIterator($path);
         $iterator = new RecursiveIteratorIterator($dir_iterator);
         foreach ($iterator as $file) {
@@ -43,10 +49,10 @@ class Command extends Application
             $realNamespace = trim($namespace . '\\' . trim(dirname(str_replace('\\', DIRECTORY_SEPARATOR, $relativePath)), '.'), '\\');
             $realNamespace =  str_replace('/', '\\', $realNamespace);
             $class_name = trim($realNamespace . '\\' . $file->getBasename('.php'), '\\');
-            if (!class_exists($class_name) || !is_a($class_name, sCommand::class, true) || (new \ReflectionClass($class_name))->isAbstract()) {
+            if (!class_exists($class_name) || !is_a($class_name, sCommand::class, true) || (new ReflectionClass($class_name))->isAbstract()) {
                 continue;
             }
-            $this->add($class_name);
+            $this->add(new $class_name);
         }
 
         return $this;
