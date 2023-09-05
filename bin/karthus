@@ -19,7 +19,7 @@ foreach ($vendor as $file) {
 }
 
 if(!file_exists($file)){
-    die("include composer autoload.php fail\n");
+    die("include composer autoload.php fail");
 }
 
 $cli = new Command();
